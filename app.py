@@ -221,7 +221,7 @@ def main():
     # --- Streamlit UI Setup ---
     st.set_page_config(page_title="Pemilu Parser", layout="wide")
     st.title("📊 Rekapitulasi Suara Pemilu")
-    st.write("Upload file DA1-DPR untuk menggabungkannya menjadi satu tabel.")
+    st.write("Upload file DA1 untuk menggabungkannya menjadi satu tabel.")
 
     # --- NEW: Drag and Drop Uploader ---
     # accept_multiple_files=True lets you select or drag in dozens of files at once
