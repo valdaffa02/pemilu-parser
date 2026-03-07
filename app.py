@@ -55,6 +55,9 @@ def extract_vote_by_party(sheet):
             
             # Clean the current cell string for safer pattern matching
             cell_str = str(cell_value).strip().upper().replace('\n', ' ')
+            if cell_str == "B.":
+                print("B. | index: ", current_party_index)
+            #print(cell_str)
             
             # Find kecamatan
             if cell_str == "KECAMATAN/DISTRIK *)":
@@ -255,7 +258,8 @@ def extract_vote_by_party(sheet):
                             suara.append([clean_party_name])
                             #print(clean_party_name)
                             current_party_index = len(suara) - 1 # Update current party tracker
-                            
+                        
+                        print("Parpol: ", clean_party_name, " | index: ", current_party_index, " | stored: ", suara[current_party_index][0])
                         break # Stop looking right once we found the party name
                 
                 break # Move to the next row
@@ -266,6 +270,7 @@ def extract_vote_by_party(sheet):
             elif cell_str != "B." and in_pdip_section:
                 cand_name = "UNKNOWN"
                 temp_votes = []
+                print("current party index: ", current_party_index, " | ", cell_str)
                 
                 # Scan to the right to find the candidate name and votes
                 for j in range(i + 1, len(row)):
@@ -306,18 +311,20 @@ def extract_vote_by_party(sheet):
                         candidate_found = True
                         break
                 if not candidate_found:
+                    print("candidate not")
                     pdip_candidates.append([cand_name] + temp_votes)
                 break # Move to the next row
             
             # ---------------------------------------------------------
             # 1.2.2d: Find Total Valid Votes for Party + Candidates
             # ---------------------------------------------------------
-            elif "JUMLAH SUARA SAH PARTAI POLITIK DAN CALON" in cell_str and "(A.1+A.2)" in cell_str:
+            elif cell_str == "B." and "JUMLAH SUARA SAH PARTAI POLITIK DAN CALON" in row[i+1] and "(A.1+A.2)" in row[i+1]:
                 if current_party_index != -1:
+                    print("Parpol cari suara: ", suara[current_party_index][0], " | index: ", current_party_index)
                     temp_votes = []
                     
                     # Extract every value right side of it
-                    for j in range(i + 1, len(row)):
+                    for j in range(i + 2, len(row)):
                         right_val = row[j]
                         if right_val is not None and str(right_val).strip() != "":
                             # Safely typecast the extracted vote to an integer
